@@ -1,29 +1,35 @@
 var $ = require('jquery');
 var Backbone = require('backbone');
 
-// form template
+// calling in the created Handlebars templates
 var contactForm = require('../../templates/contact_list_form.hbs');
 var contactItem = require('../../templates/list_item.hbs');
 
 
-
+// View constructor created to intercept the handelbars data and
+// append it to the page
 var ContactForm = Backbone.View.extend({
-  // create a form element <form></form>
+  // create a form element <form></form> to encase the handlebars input template
   tagName: 'form',
   // set this element's template
   template: contactForm,
-
+  // our way of adding event handlers/listeners and then directing to the function
   events: {
+    // on click of the form-submit button, we will initiate the createContact function
     "click .form-submit": 'createContact'
   },
-
+  //backbone constructor function - event parameter dealing with preventDefault
   createContact: function(event){
+    // prevent the default behavior of the browser when the function is invoked
     event.preventDefault();
+    // formData is holding the objects entered into the form
     var formData = this.$el.serializeObject();
     console.log(formData);
+    // when the submit button is clicked, send the formData to the instance collection
+    //if the url is setup to accept incoming data, it will trigger an immediate 'add',
+    // request, and sync
     this.collection.create(formData);
   },
-
   // this.collection.create();
 
   render: function(){
@@ -35,10 +41,11 @@ var ContactForm = Backbone.View.extend({
 
 });
 
-
-
+//creating a new view to handle the ul we need to place into the DOM
 var ListView = Backbone.View.extend({
+  // tagName is converting the free <div> to a <ul>
   tagName: 'ul',
+  // this will create the list-group class for possible styling and properties
   className: 'list-group',
 
   initialize: function(){
@@ -60,7 +67,6 @@ var ListView = Backbone.View.extend({
 });
 
 
-
   var ListItemView = Backbone.View.extend({
     tagName: 'li',
     className: 'list-group-item',
@@ -74,9 +80,6 @@ var ListView = Backbone.View.extend({
       return this;
     }
   });
-
-
-
 
 
 $.fn.serializeObject = function() {
